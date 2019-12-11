@@ -1,4 +1,4 @@
-# finder-import README
+# Finder Import
 Allows you to import a file by searching for it through the file finder.
 
 ## Features
@@ -11,3 +11,6 @@ Allows you to import a file by searching for it through the file finder.
 * `finderImport.allowFileExtension`: Decides whether or not the file extension will be included in the imported path.
 * `finderImport.include`: Files to be included in results
 * `finderImport.ignore`: Files and folders to be ignored
+
+## Installation
+Download the vsix file![(here)](lnd-theme-0.0.1.vsix). Use the overflow menu under extensions in vscode to select "Install from VSIX".
