@@ -2,10 +2,15 @@ import * as vscode from 'vscode';
 
 const PARENT_DIRECTORY = '../'
 const SAME_DIRECTORY = './'
-const IMPORT_BASE_STRING = `import $fileName from '$relativePath'`
-const INDEX_MATCH_REGEX = /index\.(js|ts|jsx)/i
-const ALLOW_INDEX_FILE = false
-const ALLOW_FILE_EXTENSION = false
+const INDEX_MATCH_REGEX = /index\.(js|ts|jsx)$/i
+
+const settings = {
+  importBaseString: `import $fileName from '$relativePath'`,
+  include: '**/*.{js,ts,jsx}',
+  ignore: '**/node_modules/**',
+  allowIndexFile: false,
+  allowFileExtension: false
+}
 
 export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand('extension.fuzzyImport', async () => {
@@ -15,24 +20,31 @@ export function activate(context: vscode.ExtensionContext) {
       return
     }
 
+    loadSettings()
     const currentFile = getCurrentFilePath(editor)
     const availableFiles = await getAllAvailableFiles()
     const selectedFile = await vscode.window.showQuickPick(availableFiles)
     if (selectedFile) {
-      const relativePath = convertToRelativePath(selectedFile, currentFile)
-      insertImport(relativePath, editor)
+      const [relativePath, fileName] = convertToRelativePath(selectedFile, currentFile)
+      insertImport(relativePath, fileName, editor)
     }
-	});
+	})
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(disposable)
 }
 
-function insertImport(relativePath: string, editor: vscode.TextEditor) {
-  const fileName = relativePath
-    .replace(/(.*\/|\..*?$)/g, '')
-    .replace(/-([a-z])/g, groups => groups[1].toUpperCase())
-  const importLine = IMPORT_BASE_STRING
-    .replace(/\$fileName/g, fileName)
+function loadSettings() {
+  settings.importBaseString = vscode.workspace.getConfiguration().get('finderImport.importString') || settings.importBaseString
+  settings.allowIndexFile = vscode.workspace.getConfiguration().get('finderImport.allowIndexFile') || settings.allowIndexFile
+  settings.allowFileExtension = vscode.workspace.getConfiguration().get('finderImport.allowFileExtension') || settings.allowFileExtension
+  settings.include = vscode.workspace.getConfiguration().get('finderImport.include') || settings.include
+  settings.ignore = vscode.workspace.getConfiguration().get('finderImport.ignore') || settings.ignore
+}
+
+function insertImport(relativePath: string, fileName: string, editor: vscode.TextEditor) {
+  const casedName = fileName.replace(/[-\.]([a-z])/g, groups => groups[1].toUpperCase())
+  const importLine = settings.importBaseString
+    .replace(/\$fileName/g, casedName)
     .replace(/\$relativePath/g, relativePath)
 
   editor.edit(
@@ -54,7 +66,7 @@ function getCurrentFilePath(editor: vscode.TextEditor) {
 }
 
 async function getAllAvailableFiles() {
-  const files = await vscode.workspace.findFiles('**/*.{js,ts,jsx}', '**/node_modules/**')
+  const files = await vscode.workspace.findFiles(settings.include, settings.ignore)
   const workspaceFolders = vscode.workspace.workspaceFolders
 
   if (workspaceFolders && workspaceFolders.length === 1) {
@@ -75,25 +87,32 @@ function convertToRelativePath(importStr: string, currentDirectory: string) {
     importValues.length === currentValues.length &&
     importValues.length - 1 === offsetIndex
   ) {
-    return `${SAME_DIRECTORY}${getFileImportValue()}`
+    const [lastValue, fileName] = getFileImportValue()
+    return [`${SAME_DIRECTORY}${lastValue}`, fileName]
   }
 
-  const remaingParentDirs = currentValues.length - 1 - offsetIndex
-  const remainingImportDirs = importValues.length - 1 - offsetIndex
-  const upTraversals = PARENT_DIRECTORY.repeat(remaingParentDirs)
-  const downTraversals = remainingImportDirs > 0 
-    ? importValues.slice(offsetIndex, offsetIndex + remainingImportDirs).join('/') + '/'
-    : ''
-  return `${upTraversals}${downTraversals}${getFileImportValue()}`
+  const remaingParentDirCount = currentValues.length - 1 - offsetIndex
+  const remainingImportDirCount = importValues.length - 1 - offsetIndex
+  const [lastValue, fileName] = getFileImportValue()
+  const upString = PARENT_DIRECTORY.repeat(remaingParentDirCount)
+  const downTraversals = remainingImportDirCount > 0 
+    ? importValues.slice(offsetIndex, offsetIndex + remainingImportDirCount) 
+    : []
+  const downString = [...downTraversals, ...(lastValue ? [lastValue] : [])].join('/')
+  return [`${upString}${downString}`, fileName]
 
   function getFileImportValue() {
     const file = importValues[importValues.length - 1]
-    if (!ALLOW_INDEX_FILE && INDEX_MATCH_REGEX.test(file)) {
-      return ''
+    const fileName = file.replace(/\.[^\.]*$/, '')
+
+    if (!settings.allowIndexFile && INDEX_MATCH_REGEX.test(file)) {
+      const folderName = importValues.length > 2 ? importValues[importValues.length - 2] : fileName
+      return ['', folderName]
     }
-    if (!ALLOW_FILE_EXTENSION) {
-      return file.replace(/\..*?$/, '')
+    if (!settings.allowFileExtension) {
+      return [fileName, fileName]
     }
+    return [file, fileName]
   }
 }
 
