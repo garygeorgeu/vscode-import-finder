@@ -7,7 +7,7 @@ Allows you to import a file by searching for it through the file finder.
 
 ## Extension Settings
 * `finderImport.importString`:
-  - The template that should be used for the import. $fileName is replaced with a camel cased version of the file name. $relativePath is replaced with the relative path of the file.
+  - The template that should be used for the import. `$fileName` is replaced with a camel cased version of the file name. `$relativePath` is replaced with the relative path of the file.
   - Type: `string`
   - Default: `import $fileName from '$relativePath'`
 * `finderImport.allowIndexFile`:
