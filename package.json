@@ -83,6 +83,13 @@
         }
       }
 		},
+		"keybindings": [
+			{
+				"key": "ctrl+o",
+				"command": "extension.fuzzyImport",
+				"when": "editorTextFocus"
+			}
+		],
 		"commands": [
 			{
 				"command": "extension.fuzzyImport",
