@@ -35,31 +35,53 @@
 					"description": "Decides whether or not to include the \"index(.js)\" in the imported path.",
 					"scope": "window"
 				},
-				"finderImport.allowFileExtension": {
-					"type": [
-						"boolean"
-					],
-					"default": false,
-					"description": "Decides whether or not the file extension will be included in the imported path.",
-					"scope": "window"
-				}
-			},
-			"finderImport.include": {
-				"type": [
-					"string"
-				],
-				"default": "**/*.{js,ts,jsx}",
-				"description": "Files to be included in results",
-				"scope": "window"
-			},
-			"finderImport.ignore": {
-				"type": [
-					"string"
-				],
-				"default": "**/node_modules/**",
-				"description": "Files and folders to be ignored",
-				"scope": "window"
-			}
+        "finderImport.allowFileExtension": {
+          "type": [
+            "boolean"
+          ],
+          "default": false,
+          "description": "Decides whether or not the file extension will be included in the imported path.",
+          "scope": "window"
+        },
+        "finderImport.aliases": {
+          "type": [
+            "array"
+          ],
+          "default": [],
+          "description": "An array of aliases that are replaced when found in the imported file.",
+          "items": {
+            "type": "object",
+            "title": "Alias",
+            "properties": {
+              "match": {
+                "type": "string",
+                "description": "The string to match"
+              },
+              "replace": {
+                "type": "string",
+                "description": "The string that replaces the match"
+              }
+            }
+          },
+          "scope": "window"
+        },
+        "finderImport.include": {
+          "type": [
+            "string"
+          ],
+          "default": "**/*.{js,ts,jsx}",
+          "description": "Files to be included in results",
+          "scope": "window"
+        },
+        "finderImport.ignore": {
+          "type": [
+            "string"
+          ],
+          "default": "**/node_modules/**",
+          "description": "Files and folders to be ignored",
+          "scope": "window"
+        }
+      }
 		},
 		"commands": [
 			{

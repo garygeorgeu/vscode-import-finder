@@ -13,10 +13,13 @@ const vscode = require("vscode");
 const PARENT_DIRECTORY = '../';
 const SAME_DIRECTORY = './';
 const INDEX_MATCH_REGEX = /index\.(js|ts|jsx)$/i;
+const EXTENSION_REGEX = /\.[^\.]*$/;
+const FILE_DIR_REGEX = /.*?\//;
 const settings = {
     importBaseString: `import $fileName from '$relativePath'`,
     include: '**/*.{js,ts,jsx}',
     ignore: '**/node_modules/**',
+    aliases: [{ match: '/out', replace: '@out' }],
     allowIndexFile: false,
     allowFileExtension: false
 };
@@ -32,8 +35,8 @@ function activate(context) {
         const availableFiles = yield getAllAvailableFiles();
         const selectedFile = yield vscode.window.showQuickPick(availableFiles);
         if (selectedFile) {
-            const [relativePath, fileName] = convertToRelativePath(selectedFile, currentFile);
-            insertImport(relativePath, fileName, editor);
+            const { relativePath, fileName } = findAlias(selectedFile) || convertToRelativePath(selectedFile, currentFile);
+            insertImportString(relativePath, fileName, editor);
         }
     }));
     context.subscriptions.push(disposable);
@@ -43,10 +46,11 @@ function loadSettings() {
     settings.importBaseString = vscode.workspace.getConfiguration().get('finderImport.importString') || settings.importBaseString;
     settings.allowIndexFile = vscode.workspace.getConfiguration().get('finderImport.allowIndexFile') || settings.allowIndexFile;
     settings.allowFileExtension = vscode.workspace.getConfiguration().get('finderImport.allowFileExtension') || settings.allowFileExtension;
+    settings.aliases = vscode.workspace.getConfiguration().get('finderImport.aliases') || settings.aliases;
     settings.include = vscode.workspace.getConfiguration().get('finderImport.include') || settings.include;
     settings.ignore = vscode.workspace.getConfiguration().get('finderImport.ignore') || settings.ignore;
 }
-function insertImport(relativePath, fileName, editor) {
+function insertImportString(relativePath, fileName, editor) {
     const casedName = fileName.replace(/[-\.]([a-z])/g, groups => groups[1].toUpperCase());
     const importLine = settings.importBaseString
         .replace(/\$fileName/g, casedName)
@@ -76,37 +80,56 @@ function getAllAvailableFiles() {
         return files.map(({ path }) => path);
     });
 }
+function findAlias(selectedFile) {
+    const matchedAlias = settings.aliases.find(({ match }) => selectedFile.startsWith(match));
+    if (!matchedAlias)
+        return;
+    const { match, replace } = matchedAlias;
+    const replacedString = `${replace}${selectedFile.substring(match.length)}`;
+    const split = replacedString.split('/');
+    const [lastValue, fileName] = getFileImportValue(split);
+    const joinedPrefix = split.slice(0, split.length - 1).join('/');
+    return {
+        relativePath: `${joinedPrefix && lastValue ? joinedPrefix + '/' : joinedPrefix}${lastValue}`,
+        fileName
+    };
+}
 function convertToRelativePath(importStr, currentDirectory) {
     const importValues = importStr.split('/');
     const currentValues = currentDirectory.split('/');
     const offsetIndex = currentValues.findIndex((value, i) => value !== importValues[i]);
+    const [lastValue, fileName] = getFileImportValue(importValues);
     if (offsetIndex === -1 ||
         importValues.length === currentValues.length &&
             importValues.length - 1 === offsetIndex) {
-        const [lastValue, fileName] = getFileImportValue();
-        return [`${SAME_DIRECTORY}${lastValue}`, fileName];
+        return {
+            relativePath: `${SAME_DIRECTORY}${lastValue}`,
+            fileName
+        };
     }
     const remaingParentDirCount = currentValues.length - 1 - offsetIndex;
     const remainingImportDirCount = importValues.length - 1 - offsetIndex;
-    const [lastValue, fileName] = getFileImportValue();
     const upString = PARENT_DIRECTORY.repeat(remaingParentDirCount);
     const downTraversals = remainingImportDirCount > 0
         ? importValues.slice(offsetIndex, offsetIndex + remainingImportDirCount)
         : [];
     const downString = [...downTraversals, ...(lastValue ? [lastValue] : [])].join('/');
-    return [`${upString}${downString}`, fileName];
-    function getFileImportValue() {
-        const file = importValues[importValues.length - 1];
-        const fileName = file.replace(/\.[^\.]*$/, '');
-        if (!settings.allowIndexFile && INDEX_MATCH_REGEX.test(file)) {
-            const folderName = importValues.length > 2 ? importValues[importValues.length - 2] : fileName;
-            return ['', folderName];
-        }
-        if (!settings.allowFileExtension) {
-            return [fileName, fileName];
-        }
-        return [file, fileName];
+    return {
+        relativePath: `${upString}${downString}`,
+        fileName
+    };
+}
+function getFileImportValue(fileArr) {
+    const fileWithExtension = fileArr[fileArr.length - 1];
+    const fileName = fileWithExtension.replace(EXTENSION_REGEX, '');
+    if (!settings.allowIndexFile && INDEX_MATCH_REGEX.test(fileWithExtension)) {
+        const folderName = fileArr.length > 2 ? fileArr[fileArr.length - 2] : fileName;
+        return ['', folderName];
     }
+    if (!settings.allowFileExtension) {
+        return [fileName, fileName];
+    }
+    return [fileWithExtension, fileName];
 }
 function deactivate() { }
 exports.deactivate = deactivate;
