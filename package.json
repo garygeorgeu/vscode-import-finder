@@ -1,40 +1,40 @@
 {
-	"name": "finder-import",
-	"displayName": "Finder Import",
-	"description": "Import a file by searching for it",
-	"version": "0.0.1",
-	"publisher": "garygeorgeu",
-	"repository": "https://github.com/GaryGeorgeu/vscode-finder-import",
-	"engines": {
-		"vscode": "^1.40.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:extension.fuzzyImport"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"configuration": {
-			"title": "Finder Import",
-			"properties": {
-				"finderImport.importString": {
-					"type": [
-						"string"
-					],
-					"default": "import $fileName from '$relativePath'",
-					"description": "The template that should be used for the import. $fileName is replaced with a camelcased version of the file. $relativePath is replaced with the $relativePath.",
-					"scope": "window"
-				},
-				"finderImport.allowIndexFile": {
-					"type": [
-						"boolean"
-					],
-					"default": false,
-					"description": "Decides whether or not to include the \"index(.js)\" in the imported path.",
-					"scope": "window"
-				},
+  "name": "finder-import",
+  "displayName": "Finder Import",
+  "description": "Import a file by searching for it",
+  "version": "0.0.1",
+  "publisher": "garygeorgeu",
+  "repository": "https://github.com/GaryGeorgeu/vscode-finder-import",
+  "engines": {
+    "vscode": "^1.40.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:finderImport.import"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Finder Import",
+      "properties": {
+        "finderImport.importString": {
+          "type": [
+            "string"
+          ],
+          "default": "import $fileName from '$relativePath'",
+          "description": "The template that should be used for the import. $fileName is replaced with a camelcased version of the file. $relativePath is replaced with the $relativePath.",
+          "scope": "window"
+        },
+        "finderImport.allowIndexFile": {
+          "type": [
+            "boolean"
+          ],
+          "default": false,
+          "description": "Decides whether or not to include the \"index(.js)\" in the imported path.",
+          "scope": "window"
+        },
         "finderImport.allowFileExtension": {
           "type": [
             "boolean"
@@ -82,37 +82,37 @@
           "scope": "window"
         }
       }
-		},
-		"keybindings": [
-			{
-				"key": "ctrl+o",
-				"command": "extension.fuzzyImport",
-				"when": "editorTextFocus"
-			}
-		],
-		"commands": [
-			{
-				"command": "extension.fuzzyImport",
-				"title": "Import a file by searching for it"
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.11.7",
-		"@types/vscode": "^1.40.0",
-		"glob": "^7.1.5",
-		"mocha": "^6.2.2",
-		"typescript": "^3.6.4",
-		"tslint": "^5.20.0",
-		"vscode-test": "^1.2.2"
-	}
+    },
+    "keybindings": [
+      {
+        "key": "ctrl+i",
+        "command": "finderImport.import",
+        "when": "editorTextFocus"
+      }
+    ],
+    "commands": [
+      {
+        "command": "finderImport.import",
+        "title": "Import a file by searching for it"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.11.7",
+    "@types/vscode": "^1.40.0",
+    "glob": "^7.1.5",
+    "mocha": "^6.2.2",
+    "typescript": "^3.6.4",
+    "tslint": "^5.20.0",
+    "vscode-test": "^1.2.2"
+  }
 }

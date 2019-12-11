@@ -4,7 +4,6 @@ const PARENT_DIRECTORY = '../'
 const SAME_DIRECTORY = './'
 const INDEX_MATCH_REGEX = /index\.(js|ts|jsx)$/i
 const EXTENSION_REGEX = /\.[^\.]*$/
-const FILE_DIR_REGEX = /.*?\//
 
 const settings = {
   importBaseString: `import $fileName from '$relativePath'`,
@@ -16,7 +15,7 @@ const settings = {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand('extension.fuzzyImport', async () => {
+  let disposable = vscode.commands.registerCommand('finderImport.import', async () => {
     const editor = vscode.window.activeTextEditor
     if (!editor) {
       vscode.window.showInformationMessage("No active editor available")
