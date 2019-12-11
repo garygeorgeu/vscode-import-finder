@@ -37,6 +37,8 @@ Allows you to import a file by searching for it through the file finder.
   - Default: `'**/node_modules/**'`
 
 ## Installation
-Download the vsix file [(here)](https://github.com/GaryGeorgeu/vscode-finder-import/raw/master/finder-import-0.0.1.vsix). Use the overflow menu under extensions in vscode to select "Install from VSIX".
+Download the [(vsix file)](https://github.com/GaryGeorgeu/vscode-finder-import/raw/master/finder-import-0.0.1.vsix). Use the overflow menu under extensions in vscode to select "Install from VSIX".
 
 ## Examples
+![example1](https://github.com/GaryGeorgeu/vscode-finder-import/blob/master/examples/example1.gif)
+![example2](https://github.com/GaryGeorgeu/vscode-finder-import/blob/master/examples/example2.gif)
