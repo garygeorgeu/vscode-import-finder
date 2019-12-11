@@ -38,11 +38,11 @@ Default hotkey: `ctrl+i`
   - Default: `'**/node_modules/**'`
 
 ## Installation
-Download the [(vsix file)](https://github.com/GaryGeorgeu/vscode-finder-import/raw/master/finder-import-0.0.1.vsix). Use the overflow menu under extensions in vscode to select "Install from VSIX".
+Download the [(vsix file)](https://github.com/GaryGeorgeu/vscode-import-finder/raw/master/import-finder-0.0.1.vsix). Use the overflow menu under extensions in vscode to select "Install from VSIX".
 
 ## Examples
 - Importing a file from another folder
-  - ![example1](https://github.com/GaryGeorgeu/vscode-finder-import/blob/master/examples/example1.gif)
+  - ![example1](https://github.com/GaryGeorgeu/vscode-import-finder/blob/master/examples/example1.gif)
 
 - Importing index.js file with `[{ match: '/out', replace: '@out' }]` alias set.
-  - ![example2](https://github.com/GaryGeorgeu/vscode-finder-import/blob/master/examples/example2.gif)
+  - ![example2](https://github.com/GaryGeorgeu/vscode-import-finder/blob/master/examples/example2.gif)

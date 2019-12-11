@@ -1,10 +1,10 @@
 {
-  "name": "finder-import",
+  "name": "import-finder",
   "displayName": "Finder Import",
   "description": "Import a file by searching for it",
   "version": "0.0.1",
   "publisher": "garygeorgeu",
-  "repository": "https://github.com/GaryGeorgeu/vscode-finder-import",
+  "repository": "https://github.com/GaryGeorgeu/vscode-import-finder",
   "engines": {
     "vscode": "^1.40.0"
   },
