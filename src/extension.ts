@@ -25,8 +25,8 @@ export function activate(context: vscode.ExtensionContext) {
     const availableFiles = await getAllAvailableFiles()
     const selectedFile = await vscode.window.showQuickPick(availableFiles)
     if (selectedFile) {
-      const [relativePath, fileName] = convertToRelativePath(selectedFile, currentFile)
-      insertImport(relativePath, fileName, editor)
+      const { relativePath, fileName } = convertToRelativePath(selectedFile, currentFile)
+      insertImportString(relativePath, fileName, editor)
     }
 	})
 
@@ -41,7 +41,7 @@ function loadSettings() {
   settings.ignore = vscode.workspace.getConfiguration().get('finderImport.ignore') || settings.ignore
 }
 
-function insertImport(relativePath: string, fileName: string, editor: vscode.TextEditor) {
+function insertImportString(relativePath: string, fileName: string, editor: vscode.TextEditor) {
   const casedName = fileName.replace(/[-\.]([a-z])/g, groups => groups[1].toUpperCase())
   const importLine = settings.importBaseString
     .replace(/\$fileName/g, casedName)
@@ -81,25 +81,30 @@ function convertToRelativePath(importStr: string, currentDirectory: string) {
   const importValues = importStr.split('/')
   const currentValues = currentDirectory.split('/')
   const offsetIndex = currentValues.findIndex((value, i) => value !== importValues[i])
+  const [lastValue, fileName] = getFileImportValue()
 
   if (
     offsetIndex === -1 ||
     importValues.length === currentValues.length &&
     importValues.length - 1 === offsetIndex
   ) {
-    const [lastValue, fileName] = getFileImportValue()
-    return [`${SAME_DIRECTORY}${lastValue}`, fileName]
+    return {
+      relativePath: `${SAME_DIRECTORY}${lastValue}`,
+      fileName
+    }
   }
 
   const remaingParentDirCount = currentValues.length - 1 - offsetIndex
   const remainingImportDirCount = importValues.length - 1 - offsetIndex
-  const [lastValue, fileName] = getFileImportValue()
   const upString = PARENT_DIRECTORY.repeat(remaingParentDirCount)
   const downTraversals = remainingImportDirCount > 0 
     ? importValues.slice(offsetIndex, offsetIndex + remainingImportDirCount) 
     : []
   const downString = [...downTraversals, ...(lastValue ? [lastValue] : [])].join('/')
-  return [`${upString}${downString}`, fileName]
+  return {
+    relativePath: `${upString}${downString}`,
+    fileName
+  }
 
   function getFileImportValue() {
     const file = importValues[importValues.length - 1]
