@@ -8,19 +8,33 @@ Allows you to import a file by searching for it through the file finder.
 ## Extension Settings
 * `finderImport.importString`:
   - The template that should be used for the import. $fileName is replaced with a camelcased version of the file name. $relativePath is replaced with the relative path of the file.
-  - Default: <code>import $fileName from '$relativePath'</code>
+  - Type: `string`
+  - Default: `import $fileName from '$relativePath'`
 * `finderImport.allowIndexFile`:
   - Decides whether or not to include the "index(.js)" in the imported path.
-  - Default: <code>false</code>
+  - Type: `boolean`
+  - Default: `false`
 * `finderImport.allowFileExtension`: 
   - Decides whether or not the file extension will be included in the imported path.
-  - Default: <code>false</code>
+  - Type: boolean
+  - Default: `false`
+* `finderImport.aliases`:
+  - Declares directory aliases to be used instead of the relative file path
+  - Type: `Array<Alias>`,
+    Alias: `{ 
+      match: string,
+      replace: string
+    }`
+  - Default: []
+  - Example: If a value of `[{ match: '/components', replace: '@components' }]` was used, then the imported path would be `@components/my-component` instead of `../../components/my-component`
 * `finderImport.include`:
   - Files to be included in results
-  - Default: <code>'**/*.{js,ts,jsx}'</code>
+  - Type: `string`
+  - Default: `'**/*.{js,ts,jsx}'`
 * `finderImport.ignore`:
   - Files and folders to be ignored
-  - Default: <code>'**/node_modules/**'</code>
+  - Type: `string`
+  - Default: `'**/node_modules/**'`
 
 ## Installation
 Download the vsix file![(here)](https://github.com/GaryGeorgeu/vscode-finder-import/raw/master/finder-import-0.0.1.vsix). Use the overflow menu under extensions in vscode to select "Install from VSIX".
