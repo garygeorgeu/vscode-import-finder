@@ -1,5 +1,6 @@
 # Finder Import
 Allows you to import a file by searching for it through the file finder.
+Default hotkey: `ctrl+o`
 
 ## Features
 - Calculates the relative path to the file
