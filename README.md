@@ -1,4 +1,4 @@
-# Finder Import
+# Import Finder
 Allows you to import a file by searching for it through the file finder.
 Default hotkey: `ctrl+i`
 
