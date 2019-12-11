@@ -11,7 +11,7 @@ Allows you to import a file by searching for it through the file finder.
   - Type: `string`
   - Default: `import $fileName from '$relativePath'`
 * `finderImport.allowIndexFile`:
-  - Decides whether or not to include the "index(.js)" in the imported path.
+  - Decides whether or not to include the "index.js" file in the imported path.
   - Type: `boolean`
   - Default: `false`
 * `finderImport.allowFileExtension`: 
