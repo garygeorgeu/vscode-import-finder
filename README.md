@@ -7,7 +7,7 @@ Allows you to import a file by searching for it through the file finder.
 
 ## Extension Settings
 * `finderImport.importString`:
-  - The template that should be used for the import. $fileName is replaced with a camelcased version of the file name. $relativePath is replaced with the $relativePath.
+  - The template that should be used for the import. $fileName is replaced with a camelcased version of the file name. $relativePath is replaced with the relative path of the file.
   - Default: <code>import $fileName from '$relativePath'</code>
 * `finderImport.allowIndexFile`:
   - Decides whether or not to include the "index(.js)" in the imported path.
