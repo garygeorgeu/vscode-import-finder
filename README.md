@@ -7,19 +7,19 @@ Default hotkey: `ctrl+i`
 - Support for aliases
 
 ## Extension Settings
-* `finderImport.importString`:
+* `importFinder.importString`:
   - The template that should be used for the import. `$fileName` is replaced with a camel cased version of the file name. `$relativePath` is replaced with the relative path of the file.
   - Type: `string`
   - Default: `import $fileName from '$relativePath'`
-* `finderImport.allowIndexFile`:
+* `importFinder.allowIndexFile`:
   - Decides whether or not to include the "index.js" file in the imported path.
   - Type: `boolean`
   - Default: `false`
-* `finderImport.allowFileExtension`: 
+* `importFinder.allowFileExtension`: 
   - Decides whether or not the file extension will be included in the imported path.
   - Type: boolean
   - Default: `false`
-* `finderImport.aliases`:
+* `importFinder.aliases`:
   - Declares directory aliases to be used instead of the relative file path
   - Type: `Array<Alias>`,
     Alias: `{ 
@@ -28,11 +28,11 @@ Default hotkey: `ctrl+i`
     }`
   - Default: []
   - Example: If a value of `[{ match: '/components', replace: '@components' }]` was used, then the imported path would be `@components/my-component` instead of `../../components/my-component`
-* `finderImport.include`:
+* `importFinder.include`:
   - Files to be included in results
   - Type: `string`
   - Default: `'**/*.{js,ts,jsx}'`
-* `finderImport.ignore`:
+* `importFinder.ignore`:
   - Files and folders to be ignored
   - Type: `string`
   - Default: `'**/node_modules/**'`

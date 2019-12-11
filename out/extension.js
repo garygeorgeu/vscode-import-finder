@@ -23,7 +23,7 @@ const settings = {
     allowFileExtension: false
 };
 function activate(context) {
-    let disposable = vscode.commands.registerCommand('finderImport.import', () => __awaiter(this, void 0, void 0, function* () {
+    let disposable = vscode.commands.registerCommand('importFinder.import', () => __awaiter(this, void 0, void 0, function* () {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showInformationMessage("No active editor available");
@@ -42,12 +42,12 @@ function activate(context) {
 }
 exports.activate = activate;
 function loadSettings() {
-    settings.importBaseString = vscode.workspace.getConfiguration().get('finderImport.importString') || settings.importBaseString;
-    settings.allowIndexFile = vscode.workspace.getConfiguration().get('finderImport.allowIndexFile') || settings.allowIndexFile;
-    settings.allowFileExtension = vscode.workspace.getConfiguration().get('finderImport.allowFileExtension') || settings.allowFileExtension;
-    settings.aliases = vscode.workspace.getConfiguration().get('finderImport.aliases') || settings.aliases;
-    settings.include = vscode.workspace.getConfiguration().get('finderImport.include') || settings.include;
-    settings.ignore = vscode.workspace.getConfiguration().get('finderImport.ignore') || settings.ignore;
+    settings.importBaseString = vscode.workspace.getConfiguration().get('importFinder.importString') || settings.importBaseString;
+    settings.allowIndexFile = vscode.workspace.getConfiguration().get('importFinder.allowIndexFile') || settings.allowIndexFile;
+    settings.allowFileExtension = vscode.workspace.getConfiguration().get('importFinder.allowFileExtension') || settings.allowFileExtension;
+    settings.aliases = vscode.workspace.getConfiguration().get('importFinder.aliases') || settings.aliases;
+    settings.include = vscode.workspace.getConfiguration().get('importFinder.include') || settings.include;
+    settings.ignore = vscode.workspace.getConfiguration().get('importFinder.ignore') || settings.ignore;
 }
 function insertImportString(relativePath, fileName, editor) {
     const casedName = fileName.replace(/[-\.]([a-z])/g, groups => groups[1].toUpperCase());

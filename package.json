@@ -12,14 +12,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:finderImport.import"
+    "onCommand:importFinder.import"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
       "title": "Finder Import",
       "properties": {
-        "finderImport.importString": {
+        "importFinder.importString": {
           "type": [
             "string"
           ],
@@ -27,7 +27,7 @@
           "description": "The template that should be used for the import. $fileName is replaced with a camelcased version of the file. $relativePath is replaced with the $relativePath.",
           "scope": "window"
         },
-        "finderImport.allowIndexFile": {
+        "importFinder.allowIndexFile": {
           "type": [
             "boolean"
           ],
@@ -35,7 +35,7 @@
           "description": "Decides whether or not to include the \"index(.js)\" in the imported path.",
           "scope": "window"
         },
-        "finderImport.allowFileExtension": {
+        "importFinder.allowFileExtension": {
           "type": [
             "boolean"
           ],
@@ -43,7 +43,7 @@
           "description": "Decides whether or not the file extension will be included in the imported path.",
           "scope": "window"
         },
-        "finderImport.aliases": {
+        "importFinder.aliases": {
           "type": [
             "array"
           ],
@@ -65,7 +65,7 @@
           },
           "scope": "window"
         },
-        "finderImport.include": {
+        "importFinder.include": {
           "type": [
             "string"
           ],
@@ -73,7 +73,7 @@
           "description": "Files to be included in results",
           "scope": "window"
         },
-        "finderImport.ignore": {
+        "importFinder.ignore": {
           "type": [
             "string"
           ],
@@ -86,13 +86,13 @@
     "keybindings": [
       {
         "key": "ctrl+i",
-        "command": "finderImport.import",
+        "command": "importFinder.import",
         "when": "editorTextFocus"
       }
     ],
     "commands": [
       {
-        "command": "finderImport.import",
+        "command": "importFinder.import",
         "title": "Import a file by searching for it"
       }
     ]
